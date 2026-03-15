@@ -10331,7 +10331,7 @@ EOF
 			echo "- [nostr] # 加密隱私聊天"
 			echo "--------------------------------------------------------"
 
-			read -e -p "請輸入外掛 ID（輸入 0 退出）：" raw_input
+			read -e -p "请输入插件 ID（输入 0 退出）： " raw_input
 
 			[ "$raw_input" = "0" ] && break
 			[ -z "$raw_input" ] && continue
@@ -10596,7 +10596,7 @@ EOF
 
 		domains=$(openclaw_find_webui_domain)
 		if [ -n "$domains" ]; then
-			echo "網域地址："
+			echo "網域名稱地址："
 			echo "$domains" | while read d; do
 				echo "https://${d}/#token=${token}"
 			done

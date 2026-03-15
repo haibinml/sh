@@ -61,7 +61,7 @@ CheckFirstRun_true() {
 
 # 이 기능은 함수에 묻혀있는 정보를 수집하고 사용자가 사용하는 현재 스크립트 버전 번호, 사용 시간, 시스템 버전, CPU 아키텍처, 시스템 국가 및 기능 이름을 기록합니다. 민감한 정보는 포함되어 있지 않으니 걱정하지 마세요! 저를 믿어주세요!
 # 이 기능은 왜 설계되었나요? 그 목적은 사용자가 사용하고 싶어하는 기능을 더 잘 이해하고, 기능을 더욱 최적화하고 사용자 요구에 맞는 더 많은 기능을 출시하는 것입니다.
-# send_stats 함수 호출 위치에 대한 전문을 검색할 수 있습니다. 투명하고 오픈 소스입니다. 불편하신 점이 있으시면 이용을 거부하실 수 있습니다.
+# send_stats 함수 호출 위치에 대한 전문을 검색할 수 있습니다. 투명하고 오픈 소스입니다. 우려되는 사항이 있는 경우 이용을 거부하실 수 있습니다.
 
 
 
@@ -502,22 +502,22 @@ while true; do
 			;;
 		2)
 			send_stats "지정된 컨테이너 시작"
-			read -e -p "컨테이너 이름을 입력하세요(여러 컨테이너 이름을 공백으로 구분하세요)." dockername
+			read -e -p "컨테이너 이름을 입력하세요(여러 컨테이너 이름을 공백으로 구분하세요):" dockername
 			docker start $dockername
 			;;
 		3)
 			send_stats "지정된 컨테이너 중지"
-			read -e -p "컨테이너 이름을 입력하세요(여러 컨테이너 이름을 공백으로 구분하세요)." dockername
+			read -e -p "컨테이너 이름을 입력하세요(여러 컨테이너 이름을 공백으로 구분하세요):" dockername
 			docker stop $dockername
 			;;
 		4)
 			send_stats "지정된 컨테이너 삭제"
-			read -e -p "컨테이너 이름을 입력하세요(여러 컨테이너 이름을 공백으로 구분하세요)." dockername
+			read -e -p "컨테이너 이름을 입력하세요(여러 컨테이너 이름을 공백으로 구분하세요):" dockername
 			docker rm -f $dockername
 			;;
 		5)
 			send_stats "지정된 컨테이너를 다시 시작합니다."
-			read -e -p "컨테이너 이름을 입력하세요(여러 컨테이너 이름을 공백으로 구분하세요)." dockername
+			read -e -p "컨테이너 이름을 입력하세요(여러 컨테이너 이름을 공백으로 구분하세요):" dockername
 			docker restart $dockername
 			;;
 		6)
@@ -1846,7 +1846,7 @@ check_waf_status() {
 	if grep -q "^\s*#\s*modsecurity on;" /home/web/nginx.conf; then
 		waf_status=""
 	elif grep -q "modsecurity on;" /home/web/nginx.conf; then
-		waf_status="WAF가 켜져 있습니다"
+		waf_status="WAF가 켜져 있습니다."
 	else
 		waf_status=""
 	fi
@@ -2667,7 +2667,7 @@ clear_container_rules() {
 		iptables -D DOCKER-USER -p tcp -d "$container_ip" -j DROP
 	fi
 
-	# 특정 IP를 허용하는 규칙 지우기
+	# 지정된 IP를 허용하는 규칙을 지웁니다.
 	if iptables -C DOCKER-USER -p tcp -s "$allowed_ip" -d "$container_ip" -j ACCEPT &>/dev/null; then
 		iptables -D DOCKER-USER -p tcp -s "$allowed_ip" -d "$container_ip" -j ACCEPT
 	fi
@@ -2686,7 +2686,7 @@ clear_container_rules() {
 		iptables -D DOCKER-USER -p udp -d "$container_ip" -j DROP
 	fi
 
-	# 특정 IP를 허용하는 규칙 지우기
+	# 지정된 IP를 허용하는 규칙을 지웁니다.
 	if iptables -C DOCKER-USER -p udp -s "$allowed_ip" -d "$container_ip" -j ACCEPT &>/dev/null; then
 		iptables -D DOCKER-USER -p udp -s "$allowed_ip" -d "$container_ip" -j ACCEPT
 	fi
@@ -2887,7 +2887,7 @@ while true; do
 			setup_docker_dir
 			check_disk_space $app_size /home/docker
 			while true; do
-				read -e -p "애플리케이션 외부 서비스 포트를 입력하고 Enter를 누르면 기본적으로 사용됩니다.${docker_port}포트:" app_port
+				read -e -p "애플리케이션 외부 서비스 포트를 입력하고 Enter 키를 누르면 기본적으로 사용됩니다.${docker_port}포트:" app_port
 				local app_port=${app_port:-${docker_port}}
 
 				if ss -tuln | grep -q ":$app_port "; then
@@ -3010,7 +3010,7 @@ docker_app_plus() {
 				check_disk_space $app_size /home/docker
 
 				while true; do
-					read -e -p "애플리케이션 외부 서비스 포트를 입력하고 Enter를 누르면 기본적으로 사용됩니다.${docker_port}포트:" app_port
+					read -e -p "애플리케이션 외부 서비스 포트를 입력하고 Enter 키를 누르면 기본적으로 사용됩니다.${docker_port}포트:" app_port
 					local app_port=${app_port:-${docker_port}}
 
 					if ss -tuln | grep -q ":$app_port "; then
@@ -4100,7 +4100,7 @@ EOF
 
 	donlond_frp frps
 
-	# 생성된 정보를 출력
+	# 생성된 정보 출력
 	ip_address
 	echo "------------------------"
 	echo "클라이언트 배포에 필요한 매개변수"
@@ -4162,7 +4162,7 @@ remote_port = ${remote_port}
 
 EOF
 
-	# 생성된 정보를 출력
+	# 생성된 정보 출력
 	echo "제공하다$service_namefrpc.toml에 성공적으로 추가되었습니다."
 
 	docker restart frpc
@@ -4773,7 +4773,7 @@ linux_clean() {
 
 bbr_on() {
 
-# 커널 튜닝 모듈과의 충돌을 방지하기 위해 sysctl.d에 대한 통합 쓰기
+# 커널 조정 모듈과의 충돌을 방지하기 위해 sysctl.d에 대한 통합 쓰기
 local CONF="/etc/sysctl.d/99-kejilion-bbr.conf"
 mkdir -p /etc/sysctl.d
 echo "net.core.default_qdisc=fq" > "$CONF"
@@ -4977,7 +4977,7 @@ import_sshkey() {
 	fi
 
 	if [[ ! "$public_key" =~ ^ssh-(rsa|ed25519|ecdsa) ]]; then
-		echo -e "${gl_hong}오류: 합법적인 SSH 공개 키처럼 보이지 않습니다.${gl_bai}"
+		echo -e "${gl_hong}오류: 합법적인 SSH 공개 키가 아닌 것 같습니다.${gl_bai}"
 		return 1
 	fi
 
@@ -5838,7 +5838,7 @@ clamav_freshclam() {
 
 clamav_scan() {
 	if [ $# -eq 0 ]; then
-		echo "스캔할 디렉터리를 지정하세요."
+		echo "스캔할 디렉터리를 지정하십시오."
 		return
 	fi
 
@@ -5951,7 +5951,7 @@ _kernel_optimize_core() {
 
 	echo -e "${gl_lv}로 전환하다${mode_name}...${gl_bai}"
 
-	# ──장면에 따라 매개변수를 설정하세요──
+	# ──장면에 따라 매개변수를 설정합니다──
 	local SWAPPINESS DIRTY_RATIO DIRTY_BG_RATIO OVERCOMMIT MIN_FREE_KB VFS_PRESSURE
 	local RMEM_MAX WMEM_MAX TCP_RMEM TCP_WMEM
 	local SOMAXCONN BACKLOG SYN_BACKLOG
@@ -6777,7 +6777,7 @@ add_connection() {
 			echo "주요 내용을 붙여넣으세요(붙인 후 Enter를 두 번 누르세요)."
 			local password_or_key=""
 			while IFS= read -r line; do
-				# 입력이 빈 줄이고 키 내용에 이미 시작 부분이 포함된 경우 입력을 종료합니다.
+				# 입력이 빈 줄이고 키 내용에 이미 시작 부분이 포함되어 있으면 입력을 종료합니다.
 				if [[ -z "$line" && "$password_or_key" == *"-----BEGIN"* ]]; then
 					break
 				fi
@@ -7087,7 +7087,7 @@ disk_manager() {
 	send_stats "하드디스크 관리 기능"
 	while true; do
 		clear
-		echo "하드 디스크 파티션 관리"
+		echo "하드 드라이브 파티션 관리"
 		echo -e "${gl_huang}이 기능은 내부 테스트 중이므로 프로덕션 환경에서는 사용하면 안 됩니다.${gl_bai}"
 		echo "------------------------"
 		list_partitions
@@ -7153,7 +7153,7 @@ add_task() {
 			echo "주요 내용을 붙여넣으세요(붙인 후 Enter를 두 번 누르세요)."
 			local password_or_key=""
 			while IFS= read -r line; do
-				# 입력이 빈 줄이고 키 내용에 이미 시작 부분이 포함된 경우 입력을 종료합니다.
+				# 입력이 빈 줄이고 키 내용에 이미 시작 부분이 포함되어 있으면 입력을 종료합니다.
 				if [[ -z "$line" && "$password_or_key" == *"-----BEGIN"* ]]; then
 					break
 				fi
@@ -7294,7 +7294,7 @@ run_task() {
 	else
 		echo "동기화에 실패했습니다! 다음 사항을 확인하세요."
 		echo "1. 네트워크 연결이 정상인가요?"
-		echo "2. 원격 호스트에 접근 가능한지 여부"
+		echo "2. 원격 호스트에 접근할 수 있나요?"
 		echo "3. 인증정보가 정확합니까?"
 		echo "4. 로컬 및 원격 디렉터리에 올바른 액세스 권한이 있습니까?"
 	fi
@@ -8379,7 +8379,7 @@ linux_docker() {
 
 						  ;;
 					  2)
-						  read -e -p "삭제 볼륨 이름을 입력하세요(여러 볼륨 이름을 공백으로 구분하세요):" dockerjuans
+						  read -e -p "삭제 볼륨 이름을 입력하십시오(여러 볼륨 이름을 공백으로 구분하십시오):" dockerjuans
 
 						  for dockerjuan in $dockerjuans; do
 							  docker volume rm $dockerjuan
@@ -10351,7 +10351,7 @@ EOF
 
 			# 3. 시스템 물리적 디렉토리가 존재하는지 확인하십시오.
 			elif [ -d "/usr/lib/node_modules/openclaw/extensions/$plugin_id" ]; then
-				echo "💡 플러그인이 시스템 내장 디렉토리에 존재하는 것을 발견했습니다. 직접 활성화해 보십시오..."
+				echo "💡 시스템 내장 디렉토리에 플러그인이 존재하는 것을 발견했습니다. 직접 활성화해 보세요..."
 				openclaw plugins enable "$plugin_id"
 
 			else
@@ -10373,7 +10373,7 @@ EOF
 						openclaw plugins enable "$plugin_id"
 					else
 						echo "❌ 치명적인 오류: 플러그인을 얻을 수 없습니다. ID가 맞는지, 네트워크 사용이 가능한지 확인해주세요."
-						# 키: 구성이 하드 코딩되는 것을 방지하려면 아래 start_gateway를 사용하는 대신 여기로 직접 돌아가거나 계속하세요.
+						# 키: 구성 하드 코딩을 방지하려면 아래 start_gateway를 사용하는 대신 여기로 직접 돌아가거나 계속하세요.
 						break_end
 						continue
 					fi
@@ -11058,7 +11058,7 @@ while true; do
 			check_docker_app
 			check_docker_image_update $docker_name
 			clear
-			echo -e "네자 모니터링$check_docker $update_status"
+			echo -e "나타 모니터링$check_docker $update_status"
 			echo "오픈 소스, 가볍고 사용하기 쉬운 서버 모니터링 및 운영 및 유지 관리 도구"
 			echo "공식 웹사이트 구축 문서: https://nezha.wiki/guide/dashboard.html"
 			if docker ps -a --format '{{.Names}}' 2>/dev/null | grep -q "$docker_name"; then
@@ -11170,7 +11170,7 @@ while true; do
 				1)
 					setup_docker_dir
 					check_disk_space 2 /home/docker
-					read -e -p "이메일 도메인 이름을 설정하십시오(예: mail.yuming.com):" yuming
+					read -e -p "이메일 도메인 이름을 설정하세요(예: mail.yuming.com):" yuming
 					mkdir -p /home/docker
 					echo "$yuming" > /home/docker/mail.txt
 					echo "------------------------"
@@ -12409,7 +12409,7 @@ while true; do
 
 		}
 
-		local docker_describe="OpenWebUI는 새로운 llama3 대규모 언어 모델에 연결되는 대규모 언어 모델 웹 페이지 프레임워크입니다."
+		local docker_describe="OpenWebUI는 새로운 llama3 대규모 언어 모델에 연결된 대규모 언어 모델 웹 페이지 프레임워크입니다."
 		local docker_url="공식 웹사이트 소개:${gh_https_url}github.com/open-webui/open-webui"
 		local docker_use="docker exec ollama ollama run llama3.2:1b"
 		local docker_passwd=""
@@ -13152,7 +13152,7 @@ while true; do
 
 		  local app_id="80"
 		  local app_name="링크워든 북마크 관리"
-		  local app_text="태그 지정, 검색 및 팀 협업을 지원하는 오픈 소스, 자체 호스팅 북마크 관리 플랫폼입니다."
+		  local app_text="태그 지정, 검색 및 팀 협업을 지원하는 오픈 소스 자체 호스팅 북마크 관리 플랫폼입니다."
 		  local app_url="공식 홈페이지: https://linkwarden.app/"
 		  local docker_name="linkwarden-linkwarden-1"
 		  local docker_port="8080"
@@ -13520,7 +13520,7 @@ while true; do
 
 		}
 
-		local docker_describe="익명의 비밀번호로 텍스트와 파일을 공유하고, 빠른 배송과 같은 파일 픽업"
+		local docker_describe="익명의 비밀번호로 텍스트와 파일을 공유하고 빠른 배송과 같은 파일 픽업"
 		local docker_url="공식 웹사이트 소개:${gh_https_url}github.com/vastsa/FileCodeBox"
 		local docker_use="echo \"접속 주소 뒤에는 /#/admin이 붙어서 관리자 페이지에 접속합니다\""
 		local docker_passwd="echo \"관리자 비밀번호: FileCodeBox2023\""
@@ -14547,7 +14547,7 @@ discourse,yunsou,ahhhhfs,nsgame,gying" \
 	  r)
 	  	root_use
 	  	send_stats "모든 앱 복원"
-	  	echo "사용 가능한 앱 백업"
+	  	echo "사용 가능한 애플리케이션 백업"
 	  	echo "-------------------------"
 	  	ls -lt /app*.gz | awk '{print $NF}'
 	  	echo ""
@@ -14620,7 +14620,7 @@ linux_work() {
 	  echo -e "${gl_kjlan}2.   ${gl_bai}작업 영역 2"
 	  echo -e "${gl_kjlan}3.   ${gl_bai}작업 영역 3"
 	  echo -e "${gl_kjlan}4.   ${gl_bai}작업 영역 4"
-	  echo -e "${gl_kjlan}5.   ${gl_bai}작업 영역 5"
+	  echo -e "${gl_kjlan}5.   ${gl_bai}작업 공간 5번"
 	  echo -e "${gl_kjlan}6.   ${gl_bai}작업 영역 6"
 	  echo -e "${gl_kjlan}7.   ${gl_bai}작업 영역 7"
 	  echo -e "${gl_kjlan}8.   ${gl_bai}작업 영역 8"
@@ -15018,7 +15018,7 @@ log_menu() {
 		case $choice in
 			1)
 				send_stats "최근 로그 보기"
-				read -erp "가장 최근 로그 줄을 보시겠습니까? [기본값 100]:" lines
+				read -erp "최근 로그 줄을 몇 개나 보셨나요? [기본값 100]:" lines
 				lines=${lines:-100}
 				journalctl -n "$lines" --no-pager
 				read -erp "계속하려면 Enter를 누르세요..."
@@ -15173,7 +15173,7 @@ env_menu() {
 		echo "=========== 시스템 환경 변수 관리 =========="
 		echo "현재 사용자:$USER"
 		echo "--------------------------------------"
-		echo "1. 현재 일반적으로 사용되는 환경변수를 확인한다"
+		echo "1. 현재 일반적으로 사용되는 환경변수를 확인하세요."
 		echo "2. ~/.bashrc 보기"
 		echo "3. ~/.profile 보기"
 		echo "4. ~/.bashrc 편집"
@@ -15549,8 +15549,8 @@ EOF
 						;;
 					2)
 						rm -f /etc/gai.conf
-						echo "먼저 IPv6로 전환됨"
-						send_stats "먼저 IPv6로 전환됨"
+						echo "IPv6 우선순위로 전환됨"
+						send_stats "IPv6 우선순위로 전환됨"
 						;;
 
 					3)
@@ -15757,7 +15757,7 @@ EOF
 				# 현재 시스템 시간대 가져오기
 				local timezone=$(current_timezone)
 
-				# 현재 시스템 시간 가져오기
+				# 현재 시스템 시간을 가져옵니다
 				local current_time=$(date +"%Y-%m-%d %H:%M:%S")
 
 				# 시간대 및 시간 표시
@@ -16822,7 +16822,7 @@ echo "------------------------"
 echo -e "${gl_zi}V.PS 월 6.9달러 도쿄 소프트뱅크 2코어 1G 메모리 20G 하드드라이브 월 1T 트래픽${gl_bai}"
 echo -e "${gl_bai}URL: https://vps.hosting/cart/tokyo-cloud-kvm-vps/?id=148&?affid=1355&?affid=1355${gl_bai}"
 echo "------------------------"
-echo -e "${gl_kjlan}더 인기 있는 VPS 거래${gl_bai}"
+echo -e "${gl_kjlan}더 인기 있는 VPS 혜택${gl_bai}"
 echo -e "${gl_bai}홈페이지: https://kejilion.pro/topvps/${gl_bai}"
 echo "------------------------"
 echo ""

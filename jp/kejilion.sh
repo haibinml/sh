@@ -61,7 +61,7 @@ CheckFirstRun_true() {
 
 # この機能は、機能の埋め込み情報を収集し、現在のスクリプトのバージョン番号、使用時間、システム バージョン、CPU アーキテクチャ、マシンの国、およびユーザーが使用した機能名を記録します。機密情報は含まれませんので、ご安心ください。信じてください！
 # なぜこの機能が設計されたのでしょうか?その目的は、ユーザーが使いたい機能をより深く理解し、機能をさらに最適化し、ユーザーのニーズを満たす機能をさらに投入することです。
-# send_stats 関数の呼び出し位置を全文検索できます。これは透明性があり、オープンソースです。ご心配な場合はご利用をお断りすることも可能です。
+# send_stats 関数の呼び出し位置を全文検索できます。これは透明性があり、オープンソースです。ご不安がある場合はご利用をお断りすることも可能です。
 
 
 
@@ -861,12 +861,12 @@ open_port() {
 
 		if ! iptables -C INPUT -p udp --dport $port -j ACCEPT 2>/dev/null; then
 			iptables -I INPUT 1 -p udp --dport $port -j ACCEPT
-			echo "ポートがオープンされました$port"
+			echo "ポートがオープンしました$port"
 		fi
 	done
 
 	save_iptables_rules
-	send_stats "ポートがオープンされました"
+	send_stats "ポートがオープンしました"
 }
 
 
@@ -1189,7 +1189,7 @@ iptables_panel() {
 				  ;;
 
 			  15)
-				  read -e -p "ブロックされている国コードを入力してください (CN US JP のように、複数の国コードをスペースで区切ることができます):" country_code
+				  read -e -p "ブロックされている国コードを入力してください (CN US JP のように、複数の国コードをスペースで区切ることができます)。" country_code
 				  manage_country_rules block $country_code
 				  send_stats "国を許可する$country_codeIP"
 				  ;;
@@ -1744,7 +1744,7 @@ cf_purge_cache() {
 	# キャッシュをクリアするかどうかをユーザーに確認する
 	read -e -p "Cloudflareのキャッシュをクリアする必要がありますか? (y/n):" answer
 	if [[ "$answer" == "y" ]]; then
-	  echo "CF情報は以下に保存されます。$CONFIG_FILECF 情報は後で変更できます。"
+	  echo "CF 情報は次の場所に保存されます。$CONFIG_FILECF 情報は後で変更できます。"
 	  read -e -p "API_TOKEN を入力してください:" API_TOKEN
 	  read -e -p "CF ユーザー名を入力してください:" EMAIL
 	  read -e -p "zone_id を入力してください (複数の場合はスペースで区切ります):" -a ZONE_IDS
@@ -1985,7 +1985,7 @@ nginx_br() {
 		sed -i '/brotli_types/,+6 s/^\(\s*\)#\s*/\1/' /home/web/nginx.conf
 
 	elif [ "$mode" == "off" ]; then
-		# Brotliを閉じる: コメントを追加
+		# ブロトリを閉じる: コメントを追加
 		sed -i 's|^load_module /etc/nginx/modules/ngx_http_brotli_filter_module.so;|# load_module /etc/nginx/modules/ngx_http_brotli_filter_module.so;|' /home/web/nginx.conf > /dev/null 2>&1
 		sed -i 's|^load_module /etc/nginx/modules/ngx_http_brotli_static_module.so;|# load_module /etc/nginx/modules/ngx_http_brotli_static_module.so;|' /home/web/nginx.conf > /dev/null 2>&1
 
@@ -3284,7 +3284,7 @@ f2b_edit_config() {
 	[ -f "$cfg" ] || printf "[sshd]\n# bantime/findtime/maxretry\n" > "$cfg"
 
 	nano "$cfg"
-	echo -e "${gl_lv}保存されました${gl_bai}、fail2ban をリロードしています..."
+	echo -e "${gl_lv}保存されました${gl_bai}、fail2ban をリロード中..."
 	fail2ban-client reload >/dev/null 2>&1 || true
 }
 
@@ -3746,7 +3746,7 @@ ldnmp_Proxy_backend_stream() {
 		*) echo "無効な選択"; return 1 ;;
 	esac
 
-	read -e -p "1 つ以上のバックエンド IP + ポートをスペースで区切って入力してください (例: 10.13.0.2:3306 10.13.0.3:3306):" reverseproxy_port
+	read -e -p "1 つ以上のバックエンド IP + ポートをスペースで区切って入力してください (例: 10.13.0.2:3306 10.13.0.3:3306)。" reverseproxy_port
 
 	nginx_install_status
 	cd /home && mkdir -p web/stream.d
@@ -3957,7 +3957,7 @@ ldnmp_web_status() {
 
 			8)
 				send_stats "サイト構成を編集する"
-				read -e -p "サイト構成を編集するには、編集するドメイン名を入力してください:" yuming
+				read -e -p "サイト設定を編集するには、編集するドメイン名を入力してください:" yuming
 				install nano
 				nano /home/web/conf.d/$yuming.conf
 				docker exec nginx nginx -s reload
@@ -4773,7 +4773,7 @@ linux_clean() {
 
 bbr_on() {
 
-# カーネル チューニング モジュールとの競合を防ぐための sysctl.d への書き込みを統合しました。
+# カーネルチューニングモジュールとの競合を防ぐためのsysctl.dへの書き込みを統合
 local CONF="/etc/sysctl.d/99-kejilion-bbr.conf"
 mkdir -p /etc/sysctl.d
 echo "net.core.default_qdisc=fq" > "$CONF"
@@ -5802,7 +5802,7 @@ elrepo() {
 		  echo "ビデオ紹介: https://www.bilibili.com/video/BV1mH4y1w7qA?t=529.2"
 		  echo "------------------------------------------------"
 		  echo "Red Hat シリーズのディストリビューション CentOS/RedHat/Alma/Rocky/oracle のみをサポートします"
-		  echo "Linux カーネルをアップグレードすると、システムのパフォーマンスとセキュリティが向上します。可能であれば試してみて、慎重に実稼働環境をアップグレードすることをお勧めします。"
+		  echo "Linux カーネルをアップグレードすると、システムのパフォーマンスとセキュリティが向上します。可能であれば試して、慎重に実稼働環境をアップグレードすることをお勧めします。"
 		  echo "------------------------------------------------"
 		  read -e -p "続行してもよろしいですか? (はい/いいえ):" choice
 
@@ -6243,7 +6243,7 @@ optimize_web_server() {
 	_kernel_optimize_core "ウェブサイト構築最適化モード" "web"
 }
 
-# ── 初期設定に戻す（完全クリーン） ──
+# ── 还原默认设置（完全清理） ──
 restore_defaults() {
 	echo -e "${gl_lv}デフォルト設定に戻す...${gl_bai}"
 
@@ -6594,9 +6594,9 @@ send_stats "コマンドのお気に入り"
 bash <(curl -l -s ${gh_proxy}raw.githubusercontent.com/byJoey/cmdbox/refs/heads/main/install.sh)
 }
 
-# バックアップを作成する
+# バックアップの作成
 create_backup() {
-	send_stats "バックアップを作成する"
+	send_stats "バックアップの作成"
 	local TIMESTAMP=$(date +"%Y%m%d%H%M%S")
 
 	# ユーザーにバックアップ ディレクトリの入力を求めるプロンプトを表示する
@@ -6638,7 +6638,7 @@ create_backup() {
 		echo "- $path"
 	done
 
-	# バックアップを作成する
+	# バックアップの作成
 	echo "バックアップの作成$BACKUP_NAME..."
 	install tar
 	tar -czvf "$BACKUP_DIR/$BACKUP_NAME" "${BACKUP_PATHS[@]}"
@@ -7087,7 +7087,7 @@ disk_manager() {
 	send_stats "ハードディスク管理機能"
 	while true; do
 		clear
-		echo "ハードディスクのパーティション管理"
+		echo "ハードドライブのパーティション管理"
 		echo -e "${gl_huang}この機能は内部テスト中であるため、運用環境では使用しないでください。${gl_bai}"
 		echo "------------------------"
 		list_partitions
@@ -7294,7 +7294,7 @@ run_task() {
 	else
 		echo "同期に失敗しました!以下の点をご確認ください。"
 		echo "1. ネットワーク接続は正常ですか?"
-		echo "2. リモートホストにアクセスできるかどうか"
+		echo "2. リモート ホストにアクセスできますか?"
 		echo "3. 認証情報は正しいですか?"
 		echo "4. ローカル ディレクトリとリモート ディレクトリには正しいアクセス許可がありますか?"
 	fi
@@ -7455,7 +7455,7 @@ linux_info() {
 
 	local swap_info=$(free -m | awk 'NR==3{used=$3; total=$2; if (total == 0) {percentage=0} else {percentage=used*100/total}; printf "%dM/%dM (%d%%)", used, total, percentage}')
 
-	local runtime=$(cat /proc/uptime | awk -F. '{run_days=int($1 / 86400);run_hours=int(($1 % 86400) / 3600);run_minutes=int(($1% 3600) / 60); if (run_days > 0) printf("%d day ", run_days); if (run_hours > 0) printf("%d 時間 ", run_hours); printf("%d 分\n", run_ minutes)}')
+	local runtime=$(cat /proc/uptime | awk -F. '{run_days=int($1 / 86400);run_hours=int(($1 % 86400) / 3600);run_minutes=int(($1% 3600) / 60); if (run_days > 0) printf("%d day ", run_days); if (実行時間 > 0) printf("%d 時間 ", 実行時間); printf("%d 分\n", run_ minutes)}')
 
 	local timezone=$(current_timezone)
 
@@ -8363,7 +8363,7 @@ linux_docker() {
 				  echo ""
 				  echo "ボリューム操作"
 				  echo "------------------------"
-				  echo "1. 新しいボリュームを作成します"
+				  echo "1. 新しいボリュームを作成する"
 				  echo "2. 指定したボリュームを削除します"
 				  echo "3. すべてのボリュームを削除します"
 				  echo "------------------------"
@@ -10216,7 +10216,7 @@ EOF
 
 		# 5. デフォルトのモデルを選択します
 		echo
-		read -erp "デフォルトのモデル ID (またはシリアル番号。最初のものを使用する場合は空白のままにします) を入力してください。" input_model
+		read -erp "デフォルトのモデル ID (またはシリアル番号、最初のものを使用する場合は空白のままにしておきます) を入力してください:" input_model
 
 		if [[ -z "$input_model" && -n "$available_models" ]]; then
 			default_model=$(echo "$available_models" | head -1)
@@ -10238,9 +10238,9 @@ EOF
 		echo "モデルの総数:$model_count"
 		echo "======================"
 
-		read -erp "すべて追加することを確認します$model_countモデル？ (y/N):" confirm
+		read -erp "すべて追加することを確認します$model_countA model? (y/N):" confirm
 		if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
-			echo "❎ キャンセルされました"
+			echo "❎ 已取消"
 			return 1
 		fi
 
@@ -10249,7 +10249,7 @@ EOF
 
 		if [[ $? -eq 0 ]]; then
 			echo
-			echo "🔄 デフォルトのモデルを設定し、ゲートウェイを再起動します..."
+			echo "🔄 设置默认模型并重启网关..."
 			openclaw models set "$provider_name/$default_model"
 			start_gateway
 			echo "✅完了！全て$model_countロードされたモデル"
@@ -10321,7 +10321,7 @@ EOF
 			echo "- [whatsapp] #WhatsApp オートメーション"
 			echo ""
 			echo "🧠 メモリと AI:"
-			echo "- [memory-core] # 基本メモリ (ファイル検索)"
+			echo "- [memory-core] # 基本メモリ (ファイル取得)"
 			echo "- [memory-lancedb] # メモリの強化 (ベクターデータベース)"
 			echo "- [copilot-proxy] # コパイロットインターフェイスの転送"
 			echo ""
@@ -10344,7 +10344,7 @@ EOF
 			# ステータス検出用の現在のプラグイン リストを取得する
 			local plugin_list=$(openclaw plugins list 2>/dev/null)
 
-			# 2. すでにリストに含まれていて無効になっているかどうかを確認します (最も一般的なケース)。
+			# 2. すでにリストに含まれていて無効になっているかどうかを確認します (最も一般的なケース)
 			if echo "$plugin_list" | grep -qw "$plugin_id" && echo "$plugin_list" | grep "$plugin_id" | grep -q "disabled"; then
 				echo "💡プラグイン [$plugin_id] プリインストールされており、アクティベート中..."
 				openclaw plugins enable "$plugin_id" && echo "✅アクティベーション成功" || echo "❌ アクティベーションに失敗しました"
@@ -10548,7 +10548,7 @@ EOF
 	}
 
 	nano_openclaw_json() {
-		send_stats "OpenClaw 構成ファイルを編集する"
+		send_stats "OpenClaw 設定ファイルを編集する"
 		install nano
 		nano ~/.openclaw/openclaw.json
 		start_gateway
@@ -11058,7 +11058,7 @@ while true; do
 			check_docker_app
 			check_docker_image_update $docker_name
 			clear
-			echo -e "ネザモニタリング$check_docker $update_status"
+			echo -e "ネザ監視$check_docker $update_status"
 			echo "オープンソースの軽量で使いやすいサーバー監視および運用保守ツール"
 			echo "公式 Web サイト構築ドキュメント: https://nezha.wiki/guide/dashboard.html"
 			if docker ps -a --format '{{.Names}}' 2>/dev/null | grep -q "$docker_name"; then
@@ -11067,7 +11067,7 @@ while true; do
 			fi
 			echo ""
 			echo "------------------------"
-			echo "1. 使用する"
+			echo "1. 使用方法"
 			echo "------------------------"
 			echo "0. 前のメニューに戻る"
 			echo "------------------------"
@@ -12003,7 +12003,7 @@ while true; do
 
 		local docker_describe="ミニマリストの瞬間、模倣性の高いWeChatの瞬間、あなたの素晴らしい人生を記録してください"
 		local docker_url="公式サイト紹介：${gh_proxy}github.com/kingwrcy/moments?tab=readme-ov-file"
-		local docker_use="echo \"アカウント: admin パスワード: a123456\""
+		local docker_use="echo 「アカウント: admin パスワード: a123456」"
 		local docker_passwd=""
 		local app_size="1"
 		docker_app
@@ -12635,7 +12635,7 @@ while true; do
 	  62|ragflow)
 		local app_id="62"
 		local app_name="RAGFlow ナレッジベース"
-		local app_text="ドキュメントの深い理解に基づいたオープンソース RAG (Retrieval Augmented Generation) エンジン"
+		local app_text="ドキュメントの深い理解に基づくオープンソース RAG (Retrieval Augmented Generation) エンジン"
 		local app_url="公式ウェブサイト:${gh_https_url}github.com/infiniflow/ragflow"
 		local docker_name="ragflow-server"
 		local docker_port="8062"
@@ -14547,7 +14547,7 @@ discourse,yunsou,ahhhhfs,nsgame,gying" \
 	  r)
 	  	root_use
 	  	send_stats "すべてのアプリを復元する"
-	  	echo "利用可能なアプリのバックアップ"
+	  	echo "利用可能なアプリケーションのバックアップ"
 	  	echo "-------------------------"
 	  	ls -lt /app*.gz | awk '{print $NF}'
 	  	echo ""
@@ -14610,7 +14610,7 @@ linux_work() {
 	  echo -e "バックエンドワークスペース"
 	  echo -e "システムは、バックグラウンドで永続的に実行できるワークスペースを提供し、長期的なタスクを実行するために使用できます。"
 	  echo -e "SSH を切断しても、ワークスペース内のタスクは中断されず、タスクはバックグラウンドで残ります。"
-	  echo -e "${gl_huang}ヒント：${gl_bai}ワークスペースに入ったら、Ctrl+b を使用し、d だけを押してワークスペースを終了します。"
+	  echo -e "${gl_huang}ヒント：${gl_bai}ワークスペースに入ったら、Ctrl+b を使用し、d を単独で押してワークスペースを終了します。"
 	  echo -e "${gl_kjlan}------------------------"
 	  echo "現在存在するワークスペースのリスト"
 	  echo -e "${gl_kjlan}------------------------"
@@ -14620,7 +14620,7 @@ linux_work() {
 	  echo -e "${gl_kjlan}2.   ${gl_bai}作業エリア 2"
 	  echo -e "${gl_kjlan}3.   ${gl_bai}作業エリア 3"
 	  echo -e "${gl_kjlan}4.   ${gl_bai}作業エリア 4"
-	  echo -e "${gl_kjlan}5.   ${gl_bai}作業エリア5"
+	  echo -e "${gl_kjlan}5.   ${gl_bai}ワークスペースNo.5"
 	  echo -e "${gl_kjlan}6.   ${gl_bai}作業エリア6"
 	  echo -e "${gl_kjlan}7.   ${gl_bai}作業エリア 7"
 	  echo -e "${gl_kjlan}8.   ${gl_bai}作業エリア8"
@@ -15018,7 +15018,7 @@ log_menu() {
 		case $choice in
 			1)
 				send_stats "最近のログを表示する"
-				read -erp "最新のログ行を表示しますか? [デフォルト 100]:" lines
+				read -erp "最近のログ行を何行表示しましたか? [デフォルト 100]:" lines
 				lines=${lines:-100}
 				journalctl -n "$lines" --no-pager
 				read -erp "続行するには Enter キーを押してください..."
@@ -15549,8 +15549,8 @@ EOF
 						;;
 					2)
 						rm -f /etc/gai.conf
-						echo "最初にIPv6に切り替えました"
-						send_stats "最初にIPv6に切り替えました"
+						echo "IPv6優先に切り替えました"
+						send_stats "IPv6優先に切り替えました"
 						;;
 
 					3)
@@ -15772,7 +15772,7 @@ EOF
 				echo "3. 東京、日本時間 4. ソウル、韓国時間"
 				echo "5. シンガポール時間 6. インド、コルカタ時間"
 				echo "7. アラブ首長国連邦、ドバイ時間 8. オーストラリア、シドニー時間"
-				echo "9. タイ・バンコク時間"
+				echo "9.タイ・バンコク時間"
 				echo "------------------------"
 				echo "ヨーロッパ"
 				echo "11. ロンドン、イギリス時間 12. パリ、フランス時間"
@@ -16700,7 +16700,7 @@ while true; do
 	  echo -e "${gl_kjlan}------------------------${gl_bai}"
 	  echo -e "${gl_kjlan}サーバーリスト管理${gl_bai}"
 	  echo -e "${gl_kjlan}1.  ${gl_bai}サーバーの追加${gl_kjlan}2.  ${gl_bai}サーバーの削除${gl_kjlan}3.  ${gl_bai}サーバーの編集"
-	  echo -e "${gl_kjlan}4.  ${gl_bai}バックアップクラスター${gl_kjlan}5.  ${gl_bai}クラスターを復元する"
+	  echo -e "${gl_kjlan}4.  ${gl_bai}バックアップクラスタ${gl_kjlan}5.  ${gl_bai}クラスターを復元する"
 	  echo -e "${gl_kjlan}------------------------${gl_bai}"
 	  echo -e "${gl_kjlan}タスクをバッチで実行する${gl_bai}"
 	  echo -e "${gl_kjlan}11. ${gl_bai}テクノロジ ライオン スクリプトをインストールする${gl_kjlan}12. ${gl_bai}アップデートシステム${gl_kjlan}13. ${gl_bai}システムをクリーンアップする"
@@ -16738,7 +16738,7 @@ while true; do
 
 		  4)
 			  clear
-			  send_stats "バックアップクラスター"
+			  send_stats "バックアップクラスタ"
 			  echo -e "変更してください${gl_huang}/root/cluster/servers.py${gl_bai}ファイルをダウンロードしてバックアップを完了してください。"
 			  break_end
 			  ;;
@@ -16822,7 +16822,7 @@ echo "------------------------"
 echo -e "${gl_zi}V.PS 月額 6.9 ドル 東京ソフトバンク 2 コア 1G メモリ 20G ハードドライブ 月額 1T トラフィック${gl_bai}"
 echo -e "${gl_bai}URL：https://vps.hosting/cart/tokyo-cloud-kvm-vps/?id=148&?affid=1355&?affid=1355${gl_bai}"
 echo "------------------------"
-echo -e "${gl_kjlan}さらに人気のある VPS セール${gl_bai}"
+echo -e "${gl_kjlan}さらに人気のある VPS オファー${gl_bai}"
 echo -e "${gl_bai}ウェブサイト：https://kejilion.pro/topvps/${gl_bai}"
 echo "------------------------"
 echo ""
