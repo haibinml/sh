@@ -3884,7 +3884,7 @@ ldnmp_web_status() {
 			2)
 				send_stats "克隆站點域名"
 				read -e -p "請輸入舊網域名稱:" oddyuming
-				read -e -p "請輸入新網域名稱:" yuming
+				read -e -p "請輸入新網域:" yuming
 				install_certbot
 				install_ssltls
 				certs_status
@@ -3925,7 +3925,7 @@ ldnmp_web_status() {
 				send_stats "建立關聯站點"
 				echo -e "為現有的站點再關聯一個新網域用於訪問"
 				read -e -p "請輸入現有的網域名稱:" oddyuming
-				read -e -p "請輸入新網域名稱:" yuming
+				read -e -p "請輸入新網域:" yuming
 				install_certbot
 				install_ssltls
 				certs_status
@@ -4779,7 +4779,7 @@ mkdir -p /etc/sysctl.d
 echo "net.core.default_qdisc=fq" > "$CONF"
 echo "net.ipv4.tcp_congestion_control=bbr" >> "$CONF"
 
-# 清理可能導致衝突的舊版本 sysctl.conf 殘留
+# 清理可能導致衝突的舊版 sysctl.conf 殘留
 sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf 2>/dev/null
 sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf 2>/dev/null
 
@@ -6971,7 +6971,7 @@ mount_partition() {
 		return 1
 	fi
 
-	echo "分區已成功掛載到$MOUNT_POINT"
+	echo "分割區已成功掛載到$MOUNT_POINT"
 
 	# 檢查 /etc/fstab 是否已經存在 UUID 或掛載點
 	if grep -qE "UUID=$UUID|[[:space:]]$MOUNT_POINT[[:space:]]" /etc/fstab; then
@@ -10341,7 +10341,7 @@ EOF
 			local plugin_full="$raw_input"
 
 			echo "🔍 正在檢查插件狀態..."
-			# 获取当前插件列表用于状态检测
+			# 取得目前插件清單用於狀態檢測
 			local plugin_list=$(openclaw plugins list 2>/dev/null)
 
 			# 2. 檢查是否已經在 list 中且為 disabled (最常見的情況)
@@ -10450,7 +10450,7 @@ EOF
 			if [ "$skill_found" = true ]; then
 				read -e -p "是否重新安裝？ (y/N):" reinstall
 				if [[ ! "$reinstall" =~ ^[Yy]$ ]]; then
-					echo "跳过安装。"
+					echo "跳過安裝。"
 					break_end
 					continue
 				fi
@@ -10596,7 +10596,7 @@ EOF
 
 		domains=$(openclaw_find_webui_domain)
 		if [ -n "$domains" ]; then
-			echo "網域名稱地址："
+			echo "網域地址："
 			echo "$domains" | while read d; do
 				echo "https://${d}/#token=${token}"
 			done
