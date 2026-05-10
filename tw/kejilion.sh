@@ -1089,7 +1089,7 @@ iptables_panel() {
 		  echo ""
 		  echo "防火牆管理"
 		  echo "------------------------"
-		  echo "1.  开放指定端口                 2.  关闭指定端口"
+		  echo "1. 開放指定連接埠 2. 關閉指定連接埠"
 		  echo "3. 開放所有連接埠 4. 關閉所有連接埠"
 		  echo "------------------------"
 		  echo "5. IP白名單 6. IP黑名單"
@@ -1221,7 +1221,7 @@ iptables_panel() {
 add_swap() {
 	local new_swap=$1  # 获取传入的参数
 
-	# 获取当前系统中所有的 swap 分区
+	# 取得目前系統中所有的 swap 分割區
 	local swap_partitions=$(grep -E '^/dev/' /proc/swaps | awk '{print $1}')
 
 	# 遍歷並刪除所有的 swap 分割區
@@ -2192,7 +2192,7 @@ web_security() {
 					  remove fail2ban
 					  rm -rf /etc/fail2ban
 					  crontab -l | grep -v "CF-Under-Attack.sh" | crontab - 2>/dev/null
-					  echo "Fail2Ban防御程序已卸载"
+					  echo "Fail2Ban防禦程序已卸載"
 					  break
 					  ;;
 
@@ -2555,7 +2555,7 @@ check_docker_image_update() {
 		# --- 場景 A: 鏡像在 GitHub (ghcr.io) ---
 		# 提取倉庫路徑，例如 ghcr.io/onexru/oneimg -> onexru/oneimg
 		local repo_path=$(echo "$full_image_name" | sed 's/ghcr.io\///' | cut -d':' -f1)
-		# 注意：ghcr.io 的 API 比较复杂，通常最快的方法是查 GitHub Repo 的 Release
+		# 註：ghcr.io 的 API 比較複雜，通常最快的方法是查 GitHub Repo 的 Release
 		local api_url="https://api.github.com/repos/$repo_path/releases/latest"
 		local remote_date=$(curl -s "$api_url" | jq -r '.published_at' 2>/dev/null)
 
@@ -2877,7 +2877,7 @@ while true; do
 	echo "1. 安裝 2. 更新 3. 卸載"
 	echo "------------------------"
 	echo "5. 新增網域存取 6. 刪除網域存取"
-	echo "7. 允许IP+端口访问   8. 阻止IP+端口访问"
+	echo "7. 允許IP+連接埠存取 8. 阻止IP+連接埠訪問"
 	echo "------------------------"
 	echo "0. 返回上一級選單"
 	echo "------------------------"
@@ -3213,7 +3213,7 @@ f2b_sshd() {
 	fi
 }
 
-# 基础参数配置：封禁时长(bantime)、时间窗口(findtime)、重试次数(maxretry)
+# 基礎參數配置：封禁時長(bantime)、時間視窗(findtime)、重試次數(maxretry)
 # 說明：
 # - 優先寫入 /etc/fail2ban/jail.d/sshd.local（覆蓋預設 jail 配置，升級不易丟）
 # - 若是 Alpine 且 jail 名稱不同，仍寫 sshd.local；Fail2Ban 會以 jail 名稱配對
@@ -3269,7 +3269,7 @@ EOF
 }
 
 # 直接開啟主配置/覆蓋配置編輯（nano）
-# 优先编辑 /etc/fail2ban/jail.d/sshd.local（更安全），若不存在则创建
+# 優先編輯 /etc/fail2ban/jail.d/sshd.local（更安全），若不存在則創建
 f2b_edit_config() {
 	root_use
 	install nano
@@ -4163,7 +4163,7 @@ remote_port = ${remote_port}
 EOF
 
 	# 輸出產生的信息
-	echo "服務$service_name已成功加入到 frpc.toml"
+	echo "服務$service_name已成功加入 frpc.toml"
 
 	docker restart frpc
 
@@ -5931,7 +5931,7 @@ clamav() {
 
 
 # ============================================================================
-# Linux 内核调优模块（重构版）
+# Linux 核心調優模組（重構版）
 # 統一核心函數 + 場景差異化參數 + 持久化到設定檔 + 硬體自適應
 # 取代原 optimize_high_performance / optimize_balanced / optimize_web_server / restore_defaults
 # ============================================================================
@@ -6099,7 +6099,7 @@ net.ipv4.tcp_slow_start_after_idle = 0"
 	# ── 備份已有設定 ──
 	[ -f "$CONF" ] && cp "$CONF" "${CONF}.bak.$(date +%s)"
 
-	# ── 写入配置文件（持久化） ──
+	# ── 寫入設定檔（持久化） ──
 	echo -e "${gl_lv}寫入優化配置...${gl_bai}"
 	cat > "$CONF" << SYSCTL
 # kejilion 核心調優配置
@@ -6144,7 +6144,7 @@ net.ipv4.ip_local_port_range = $PORT_RANGE
 net.ipv4.tcp_mem = $((MEM_MB * 1024 / 8)) $((MEM_MB * 1024 / 4)) $((MEM_MB * 1024 / 2))
 net.ipv4.tcp_max_orphans = 32768
 
-# ── 虚拟内存 ──
+# ── 虛擬記憶體 ──
 vm.swappiness = $SWAPPINESS
 vm.dirty_ratio = $DIRTY_RATIO
 vm.dirty_background_ratio = $DIRTY_BG_RATIO
@@ -6180,7 +6180,7 @@ echo "net.netfilter.nf_conntrack_tcp_timeout_time_wait = 30"
 echo "net.netfilter.nf_conntrack_tcp_timeout_close_wait = 15"
 echo "net.netfilter.nf_conntrack_tcp_timeout_fin_wait = 15"
 else
-echo "# conntrack 未启用"
+echo "# conntrack 未啟用"
 fi)
 $STREAM_EXTRA
 $GAME_EXTRA
@@ -7541,7 +7541,7 @@ linux_tools() {
 		exit 1
 	  fi
 
-	  echo "📦 使用包管理器: $PM"
+	  echo "📦 使用套件管理器:$PM"
 	  echo -e "${gl_kjlan}------------------------${gl_bai}"
 
 	  for ((i=0; i<${#tools[@]}; i+=2)); do
@@ -8030,7 +8030,7 @@ docker_ssh_migration() {
 				project_name=$(basename "$f" | sed 's/backup_type_//')
 				path_file="$BACKUP_DIR/compose_path_${project_name}.txt"
 				[[ -f "$path_file" ]] && original_path=$(cat "$path_file") || original_path=""
-				[[ -z "$original_path" ]] && read -e -p  "未找到原始路径，请输入还原目录路径: " original_path
+				[[ -z "$original_path" ]] && read -e -p  "未找到原始路徑，請輸入還原目錄路徑:" original_path
 
 				# 檢查該 compose 項目的容器是否已在運作
 				running_count=$(docker ps --filter "label=com.docker.compose.project=$project_name" --format '{{.Names}}' | wc -l)
@@ -10235,7 +10235,7 @@ EOF
 		echo "Base URL    : $base_url"
 		echo "API Key     : ${api_key:0:8}****"
 		echo "預設模型 :$default_model"
-		echo "模型总数    : $model_count"
+		echo "模型總數 :$model_count"
 		echo "======================"
 
 		read -erp "確認添加所有$model_count個模型？ (y/N):" confirm
@@ -10331,16 +10331,16 @@ EOF
 			echo "- [nostr] # 加密隱私聊天"
 			echo "--------------------------------------------------------"
 
-			read -e -p "请输入插件 ID（输入 0 退出）： " raw_input
+			read -e -p "請輸入外掛 ID（輸入 0 退出）：" raw_input
 
 			[ "$raw_input" = "0" ] && break
 			[ -z "$raw_input" ] && continue
 
-			# 1. 自动处理：如果用户输入带 @openclaw/，提取纯 ID 方便路径检查
+			# 1. 自動處理：如果使用者輸入帶 @openclaw/，提取純 ID 方便路徑檢查
 			local plugin_id=$(echo "$raw_input" | sed 's|^@openclaw/||')
 			local plugin_full="$raw_input"
 
-			echo "🔍 正在检查插件状态..."
+			echo "🔍 正在檢查插件狀態..."
 			# 取得目前插件清單用於狀態檢測
 			local plugin_list=$(openclaw plugins list 2>/dev/null)
 
@@ -10351,7 +10351,7 @@ EOF
 
 			# 3. 檢查系統實體目錄是否存在
 			elif [ -d "/usr/lib/node_modules/openclaw/extensions/$plugin_id" ]; then
-				echo "💡 发现系统内置目录存在该插件，尝试直接启用..."
+				echo "💡 發現系統內建目錄存在該插件，嘗試直接啟用..."
 				openclaw plugins enable "$plugin_id"
 
 			else
@@ -10421,7 +10421,7 @@ EOF
 			echo "coding-agent # 自動運行 Claude Code/Codex 等程式設計助手"
 			echo "----------------------------------------"
 
-			# 提示用户输入技能名称
+			# 提示使用者輸入技能名稱
 			read -e -p "請輸入要安裝的技能名稱（輸入 0 退出）：" skill_name
 
 			# 1. 檢查是否輸入 0 退出
@@ -10596,7 +10596,7 @@ EOF
 
 		domains=$(openclaw_find_webui_domain)
 		if [ -n "$domains" ]; then
-			echo "網域地址："
+			echo "網域名稱地址："
 			echo "$domains" | while read d; do
 				echo "https://${d}/#token=${token}"
 			done
@@ -13045,7 +13045,7 @@ while true; do
 
 		}
 
-		local docker_describe="是一个中文DOS游戏合集网站"
+		local docker_describe="是一個中文DOS遊戲收藏網站"
 		local docker_url="官網介紹:${gh_https_url}github.com/rwv/chinese-dos-games"
 		local docker_use=""
 		local docker_passwd=""
@@ -13494,7 +13494,7 @@ while true; do
 		local docker_describe="開源、免費的自建直播平台"
 		local docker_url="官網介紹: https://owncast.online"
 		local docker_use="echo \"訪問地址後面帶 /admin 訪問管理員頁面\""
-		local docker_passwd="echo \"初始账号: admin  初始密码: abc123  登陆后请及时修改登录密码\""
+		local docker_passwd="echo \"初始帳號: admin 初始密碼: abc123 登陸後請及時修改登入密碼\""
 		local app_size="1"
 		docker_app
 
@@ -14253,7 +14253,7 @@ while true; do
 
 		}
 
-		local docker_describe="是一款强大的开源白板工具，集成思维导图、流程图等。"
+		local docker_describe="是一款強大的開源白板工具，整合心智圖、流程圖等。"
 		local docker_url="官網介紹:${gh_https_url}github.com/plait-board/drawnix"
 		local docker_use=""
 		local docker_passwd=""
@@ -14288,7 +14288,7 @@ discourse,yunsou,ahhhhfs,nsgame,gying" \
 
 		}
 
-		local docker_describe="PanSou是一个高性能的网盘资源搜索API服务。"
+		local docker_describe="PanSou是一個高效能的網盤資源搜尋API服務。"
 		local docker_url="官網介紹:${gh_https_url}github.com/fish2018/pansou"
 		local docker_use=""
 		local docker_passwd=""
@@ -14883,7 +14883,7 @@ fail2ban_panel() {
 						break
 						;;
 					4)
-						send_stats "SSH防御基础参数配置"
+						send_stats "SSH防禦基礎參數配置"
 						f2b_basic_config
 						break_end
 						;;
@@ -15075,7 +15075,7 @@ log_menu() {
 					3) journalctl --vacuum-size=500M ;;
 					*) echo "無效選項" ;;
 				esac
-				echo "✔ journal 日志清理完成"
+				echo "✔ journal 日誌清理完成"
 				sleep 2
 				;;
 			*)
@@ -15643,7 +15643,7 @@ EOF
 				  echo ""
 				  echo "帳戶操作"
 				  echo "------------------------"
-				  echo "1. 创建普通用户             2. 创建高级用户"
+				  echo "1. 建立普通用戶 2. 建立進階用戶"
 				  echo "------------------------"
 				  echo "3. 賦予最高權限 4. 取消最高權限"
 				  echo "------------------------"
